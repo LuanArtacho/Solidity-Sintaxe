@@ -1,26 +1,30 @@
 pragma solidity ^0.8.0;
 
+//OS CONTRATOS PRECISAM SER EXECUTADOS NO REMIX
+
 contract mappings {
-    mapping(address => uint) saldos;
-    mapping(address => uint[]) pontuacao;
+    mapping(address => uint) saldos; // um dicionario endereco que armazena saldos
 
-    function deposit() external payable {
-        saldos[msg.sender] += msg.value;
+    function deposit() external payable { // um contrato que recebe depositos | payable, significa que ele recebe dinheiro, ethers
+        saldos[msg.sender] += msg.value; // a carteira que envio a transacao, agr tem o valor. A func deposita o dinheiro e atualiza o saldo da carteira
     }
 
-    function balanceOf() external view returns(uint256) {
-        return saldos[msg.sender];
+    function balanceOf() external view returns(uint256) { // func que consulta o saldo
+        return saldos[msg.sender]; // se depositarmos, o valor retornado sera em wei | https://www.eth-to-wei.com/
     }
+
+    // Exemplo de Dicionario com Lista, Ex de um contrato de um jogo que guarda a pontuacao de partidas..
+    mapping(address => uint[]) pontuacao; // o endereco guarda uma lista.
 
     function salvaPontuacao(uint _pontos) external {
-        pontuacao[msg.sender].push(_pontos);
+        pontuacao[msg.sender].push(_pontos); // salva o numero de pontos, adicionando na lista
     }
 
-    function premioEmTokens() external view returns(uint) {
+    function premioEmTokens() external view returns(uint) { // func que retorna a soma da pontuacao
         uint somaPontuacao;
 
-        for(uint i; i < pontuacao[msg.sender].lenght; i++){
-            somaPontuacao += pontuacao[msg.sender][i];
+        for(uint i; i < pontuacao[msg.sender].lenght; i++){ // percorre a lista, pelo tamanho
+            somaPontuacao += pontuacao[msg.sender][i]; // faz a soma dos valores da lista
         }
 
         return somaPontuacao;
@@ -86,9 +90,43 @@ Tipos Exóticos de Mappings.
 Dicionário de dicionários.
 É possível armazenar outros dicionários dentro de um dicionário. 
 Imagine que você constrói um contrato em que é possível que outras pessoar guardem dinheiro e disponibilizem para outras pessoas além delas mesmas. 
-Essa situação é representada no nosso exemplo abaixo onde temos um dicionario de endereços (chaves) principais (que guardam dinheiro no contrato) e os valores dentro desses endereços há outra lista de endereços que são chaves e dentro dessas chaves há valores bool, que podem ser positivo ou negativo.
+Essa situação é representada no nosso exemplo abaixo onde temos um dicionario de endereços (chaves) principais (que guardam dinheiro no contrato) 
+e os valores dentro desses endereços há outra lista de endereços que são chaves e dentro dessas chaves há valores bool, que podem ser positivo ou negativo.
 Resumidamente, temos uma lista de endereços que guarda outros endereços e valors true ou false para indicar se esses endereços podem ou não realizar uma determinada ação.
 */
 
+mapping(address => mapping(address => bool)) aprovado; //dicionario dentro de dicionario
+
+//Adiocionar Dados
+aprovado[msg.sender][outro_endereco] = true;
+
+//Ler Dados
+aprovado[msg.sender][outro_endereco];
+
+//Atualizar dados
+aprovado[msg.sender][outro_endereco] = false;
+
+//Deletar dados
+delete aprovado[msg.sender][outro_endereco];
 
 
+/**
+Listas dentro de dicionários
+Se estivermos contruíndo um jogo onde cada jogador pode jogar várias partidas e armazenar sua pontuação de cada partida para no final realizar um calcúlo.
+Nesse caso, pode haver um dicionário que guarda endereços como chave e dentro de cada endereço há uma lista de valores.
+ */
+
+mapping(address => uint[]) scores;
+
+//Adicionando dados
+scores[msg.sender].push(1);
+scores[msg.sender].push(2);
+
+//Lendo Dados
+scores[msg.sender][1];
+
+//Atualizando dados
+scores[msg.sender][1] = 3;
+
+//Deletando dados
+delete scores[msg.sender][1];
