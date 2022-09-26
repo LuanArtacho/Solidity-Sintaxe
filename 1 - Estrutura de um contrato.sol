@@ -1,6 +1,7 @@
 //UTILIZAR O REMIX PARA DEPLOYAR OS CONTRATOS;
+//'https://remix.ethereum.org/'
 
-pragma solidity ^0.8.7; // define a verão do contrato; com ^ é a versão atual e acima
+pragma solidity ^0.8.7; // define a versão do contrato; com ^ é pega a versão atual e as acima dela
 
 import "biblioteca.com.br/libRandom"; // importar code de outro lugar; ou importar uma lib..
 
