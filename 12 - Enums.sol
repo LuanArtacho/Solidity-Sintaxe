@@ -1,25 +1,30 @@
 pragma solidity ^0.8.0;
 
+//Enums é bastante usados para criar categorias, como cores, estado de um Usuario como o exemplo abaixo, ao invés de ter uma lista e pegar pelo seu indice, o TIPO de dado Enum faz e facilita isso
+
 contract Categorias {
-    enum ESTADO {ATIVO, INATIVO, CANCELADO, CADASTRADO}
-    mapping(address => ESTADO) usuarios;
+    enum ESTADO {ATIVO, INATIVO, CANCELADO, CADASTRADO} //Definindo o Enum de ESTADO, são UpperCase
+    mapping(address => ESTADO) usuarios; // cada endereço é uma key, e o Enum(ESTADO) sao os Values, ve qual o tipo de estado o usuario esta.
 
     function addUser() external {
-        usuarios[msg.sender] = ESTADO.CADASTRADO;
+        usuarios[msg.sender] = ESTADO.CADASTRADO; // add ao usuario o estado cadastrado, sempre que chamar a função addUser
     }
 
-    function getUser() external view returns(ESTADO){
+    function getUser() external view returns(ESTADO){ //retorna qual estado o usuario esta, do tipo estado.. Ira retornar a posição do indice, ex 0 = ATIVO..
         return usuarios[msg.sender];
     }
 
-    function calcula(uint _a, uint _b) external returns(uint){
-        require(usuarios[msg.sender] == ESTADO.CADASTRADO, "Usuario nao cadastrado");
-
+    function calcula(uint _a, uint _b) external returns(uint){ // funcao que calcula e retorna o valor, se o estado do user for cadastrado
+        require(usuarios[msg.sender] == ESTADO.CADASTRADO, "Usuario nao cadastrado"); // require, é como se fosse um ternario, porem, se for verdadeira e passa pra frente o codigo, se nao ele recebe o parametro seguinte, no exemplo uma mensagem
+        // se passar do require, user como cadastrado, segue o code abaixo
         uint resultado = _a + _b;
-        usuarios[msg.sender] = ESTADO.ATIVO;
+        usuarios[msg.sender] = ESTADO.ATIVO; // muda o estado do user para ativo
         return resultado;
+
+        //se testar a funcao calcula com outra conta(User | no remix), se você nao add o user, ele ira retornar que nao esta cadastrado, e para olhar o calculo matematico da func, só olhar o output
     }
 }
+
 
 
 /**
