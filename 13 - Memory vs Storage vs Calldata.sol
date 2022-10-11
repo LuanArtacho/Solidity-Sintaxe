@@ -1,18 +1,28 @@
 pragma solidity ^0.8.0;
 
+/*
+Vamos falar de armazenamento, no solidity ha 3 tipos, Storage, memory e calldata
+Dependedo da forma que vc armazena na blockchain, vc gasta mais, menos ou nada de GAS.
+Memory e Calldata NÃO ARMAZENA OS DADOS, SÃO VARIAVEIS TEMPORARIAS | Memory é o 2 mais caro mas é muito mais barato que o storage, e o calldata é o mais barato de todos.
+Storage é quando ele realmente vai ser guardado na blockchain, é o mais caro.
+*/
+
 contract Armazenamento {
+    //Por padrao toda variavel que é declarada fora de função ela é guardada na blockchain
     string qualquerTexto;
 
-    function lerNumero() public returns(string memory) {
+    function lerNumero() public returns(string memory) {// o solidity exige que passamos o memory quando vamos retornar uma string, quando é int/bool ele não exige...
         return qualquerTexto;
     }
 
-    function guardaNumero(string calldata _texto) public returns(string memory){
+    function guardaNumero(string calldata _texto) public returns(string memory) {// O parametro calldata não permite que seja alterado, da mesma maneira que o dado veio ele vai sair, se sair..
         qualquerTexto = _texto;
-        // _texto = "outra coisa";
-        //uint memory qualquerNumero = 10;
-        uint storage qualquerNumero = 10;
-
+        //_texto = "outra coisa"; //para alterar o valor mude para memory o parametro
+        //uint memory qualquerNumero = 10; // qualquer varialvel declarada dentro de função não é armazenada, por padrao é tratada como memory
+        // Tudo que estiver em memory não é armazenado e sera perdido depois que a função ou metodo for executado.
+        //uint storage qualquerNumero = 10; // para salvar mesmo tem que passar o parametro storage
+        return _texto;
+        
     }
 }
 
