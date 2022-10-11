@@ -1,12 +1,18 @@
 pragma solidity ^0.8.0;
 
-contract Eventos {
-    event Transferencia(address indexed _dequem, address _paraonde, uint256 _quantidade);
+// eventos são como as blockchains se comumica com o mundo, eventos não são acessiveis por outros contratos outras carteiras, somente de fora
 
-    function transfer(address _praquem, uint256 _quantidade) public {
+contract Eventos {
+    event Transferencia(address _dequem, address _paraonde, uint256 _quantidade); // Declarando o evento e seus parametros...
+    event Transferencia2(address indexed _dequem, uint256 _quantidade); //indexed é um parametro que ajuda o Front-end a filtrar os eventos que acontece
+    // Ele ajuda a fazer filtros, no parametro que deseja filtrar só passar o parametro indexed, ele só vai escutar o filtro.. no caso a carteira _dequem..
+
+    function transfer(address _praquem, uint256 _quantidade) public { // só a titulo de exemplo, não é assim uma funcao de transferencia
         //codigo das verificacoes
 
-        emit Transferencia(msg.sender, _praquem, _quantidade);
+        //Toda transferencia depois de sua lógica de codigo e verificações, ela emite um evento..
+        emit Transferencia(msg.sender, _praquem, _quantidade); // emitindo o evento transferencia, e passa os parametros
+        //Bacana você executar comentando o emit, e depois vc deployar e executar novamente vendo o evento, ele tera um LOG, e ira mostrar os parametros..
     }
 }
 
