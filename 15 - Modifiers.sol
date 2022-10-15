@@ -1,24 +1,26 @@
 pragma solidity ^0.8.0;
 
-contract modificadores {
-    uint supply = 10;
-    address admin = msg.sender;
+// modifiers faz verificações antes de uma função ser executada.
 
-    function getSupply() external view returns(uint){
+contract modificadores {
+    uint supply = 10; // como se fosse um token e esse é o suply
+    address admin = msg.sender; // o adm é o endereço que esta implementando esse contrato
+
+    function getSupply() external view returns(uint){ // uma func que ve o supply..
         return supply;
     }
 
-    function mint(uint _valor) external onlyAdmin() somenteValor(_valor) {
-        supply += _valor;
+    function mint(uint _valor) external onlyAdmin() somenteValor(_valor) { // função pra criar novos tokens
+        supply += _valor; // acrescenta o _valor dentro da var supply
     }
 
-    modifier onlyAdmin() {
-        require(msg.sender == admin, "Não eh o admin");
-        _;
+    modifier onlyAdmin() { // ele que faz a verificação de somente o admin pode acrescentar novos tokens..
+        require(msg.sender == admin, "Não eh o admin"); // faz a verificação, se der falze retorna o erro, true segue.. verifica se o msg.sender é o mesmo que esta guardado na var admin
+        _; // é um placeholder, que significa, execute o codigo que vem depois..
     }
 
-    modifier somenteValor(uint _valor){
-        require(_valor == 10);
+    modifier somenteValor(uint _valor){ // quando passar a var de funcão tem que ser o mesmo nome, na func 'mint' a chamada da func 'somenteValor' passa a msm var '_valor'.. 
+        require(_valor == 10, "limite é 10"); // verifica se o valor é igual a 10
         _;
     }
 }
