@@ -17,7 +17,7 @@ contract A {
     }
 
     function getSupply() external view returns(uint){
-        return _totalSupply;
+        return _totalSupply; //retorna o total do supply
     }
 }
 

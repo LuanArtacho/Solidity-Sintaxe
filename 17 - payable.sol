@@ -1,27 +1,32 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
 
-contract Pagaveis {
+contract Pagaveis { //Veriificar a moeda nativa da blockchain usada... Ether, BNB, Matic... 
+    //Para vc enviar dinheiro pra fora do contrato seja pra outro protocolo, contrato, pessoa.. esses endereços precisam ser pagaveis usando o payable
 
-    function deposit() external payable returns(bool) {
-        require(msg.value >= 1 ether, "Não Aceito");
-        return true;
+    function deposit() external payable returns(bool) { // função payable, indica que vc vai estar recebendo ethers...
+        require(msg.value >= 1 ether, "Não Aceito"); // se a função passar, maior ou igual a 1 ether(nn é != p outras blockchains) ela retorna true, se nn cai no require, nao aceito (CASO DUVIDAS OLHAR FILE 7 | variaveis built-in)
+        return true; // o msg.value só acessivel em funções payable
     }
 
-    function balance() external view returns(uint256) {
-        return address(this).balance;
+    function balance() external view returns(uint256) { // função pra ver o saldo, ela nn altera nada por isso é tipo view
+        return address(this).balance; // assim que acessa o saldo de um endereço, se passase na funcao o endereço é só substituir no address(this) para acessar..
     }
 
-    function withdrawSend(uint256 _amount) external returns(bool){
-        if (payable(msg.sender).send(_amount)){
-            return true;
+    // retorna um true ou false qnd a transação passar ou não... Envia direto pra quem chamou a transação
+    function withdrawSend(uint256 _amount) external returns(bool){ //função de sacar, passando a quantidade (_amount)
+        if (payable(msg.sender).send(_amount)){ // o end de qm ta enviando esta guardado dentro da var (msg.sender), porem transformamos ele em um endereço payable para que possa receber ethers
+            return true; // se passar ela envia a quantidade desejada; .send(_amount)
         } else {
             return false;
         }
     }
 
-    function withdrawTransfer(uint _amount, address payable _endereco) external {
-        _endereco.transfer(_amount);
+    //QUANDO FOR EXECUTAR A FUNÇÕES DE WITHDRAW(SAQUE) ELA ESTA EM WEY... https://eth-converter.com/, caso queira sacar um 1ether jogue no site e converta
+
+    // não retorna nada, somente reverte tudo caso tenha dado falha... Ela vai sacar para o endereço que foi passado pra ela
+    function withdrawTransfer(uint _amount, address payable _endereco) external { // precisa passar a quantidade que vai enviar e dizer que o endereço é pagavel(payable) 
+        _endereco.transfer(_amount); // a função transfer tenta transferir p endereço passado, caso nao consiga ela reverte todo o processo, Ex.. caso seja uma lista e ja envio p X endereços um falha ela reverte tudo
     }
 }
 
